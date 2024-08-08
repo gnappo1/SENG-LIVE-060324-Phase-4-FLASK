@@ -5,6 +5,8 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 import { useEffect, useState } from 'react'
 import Header from './components/navigation/Header'
+import toast, { Toaster } from "react-hot-toast"
+import "./App.css"
 
 function App() {
   const [productions, setProductions] = useState([])
@@ -12,6 +14,17 @@ function App() {
   const navigate = useNavigate()
 
   //5.✅ GET Productions
+  useEffect(() => {
+    fetch("/productions")
+    .then(resp => {
+      if (resp.ok) { //! 200-299
+        resp.json().then(setProductions)
+      } else {
+        resp.json().then(errorObj => toast.error(errorObj.error))
+      }
+    })
+    .catch(errorObj => toast.error(errorObj.message))
+  }, []);
 
   // 6.✅ navigate to client/src/components/ProductionForm.js
 
@@ -32,6 +45,7 @@ function App() {
     <>
       <GlobalStyle />
       <Header handleEdit={handleEdit} />
+      <Toaster />
       <Outlet context={{ addProduction, updateProduction, deleteProduction, productions, production_edit, handleEdit }} />
     </>
   )

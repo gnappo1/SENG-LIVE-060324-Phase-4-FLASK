@@ -2,16 +2,15 @@
 
 ## Learning Goals
 
-- Review API Fundamentals
-- Discuss MVC Architecture and Reinforce Patterns / Best Practices
-- Introduce RESTful Routing
-- Build and Execute GET / POST Requests
-- Introduce and Use Postman to Interact with APIs
-- Discuss the Importance of Serializers
-- Demonstrate How to Properly Set Up Serializers
-- Demonstrate How to Use Serializers to Render Structured Data in API - 
+- Connect a React App to Flask API
+- Execute a GET Request and One or More POST/PATCH Requests from a Front End Application
+- Use Flask Validation to Protect Data from Incorrect / Corrupt Requests
+- Discuss How to Handle Errors on Front End
+- Discuss CORS
+- BONUS: Discuss honcho
 
-## Responses
+
+## Topics Covered
 
 - Lecture Topics
 - Introduction to APIs
@@ -23,8 +22,3 @@
 - SQLAlchemy-Serializer
 - Serializing Relationships
 - Serializing Associations
-
-## BONUS
-
-- Using app-level validations in Views with reqparse
-- Standardizing Api-level Errors with @app.errorhandler 

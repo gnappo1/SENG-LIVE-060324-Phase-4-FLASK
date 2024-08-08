@@ -7,7 +7,6 @@ class Production(db.Model, SerializerMixin):
         db.CheckConstraint("budget >= 0 AND budget < 1000000", name="check_positive_budget_less_than_one_million"),
         db.UniqueConstraint("title", "director", name="uq_title_per_director"),
     )
-    
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column("title", db.String(80), nullable=False, unique=True)
@@ -43,8 +42,8 @@ class Production(db.Model, SerializerMixin):
     def validate_title_and_director(self, attr_name, attr_value):
         if not isinstance(attr_value, str):
             raise TypeError(f"{attr_name} must be of type str")
-        elif len(attr_value) < 2:
-            raise ValueError(f"{attr_name} must be at least 2 characters long")
+        elif len(attr_value) < 1:
+            raise ValueError(f"{attr_name} must be at least 1 characters long")
         else:
             return attr_value
 
@@ -63,15 +62,15 @@ class Production(db.Model, SerializerMixin):
             raise TypeError("Descriptions must be strings")
         elif len(description) < 10:
             raise ValueError(
-                f"{description} has to be a string of at least 10 characters"
+                "description has to be a string of at least 10 characters"
             )
         return description
 
     @validates("budget")
     def validate_budget(self, _, budget):
-        if not isinstance(budget, float):
-            raise TypeError("Budgets must be floats")
-        elif budget < 0 or budget > 10000000:
+        if type(budget) not in [int, float]:
+            raise TypeError("Budgets must be numbers")
+        elif budget not in range(0, 1000001):
             raise ValueError(f"{budget} has to be a positive float under 10Millions")
         return budget
 

@@ -1,5 +1,6 @@
 from routes.__init__ import Resource, request, db, make_response
 from models.production import Production
+# from sqlite3 import IntegrityError
 
 class Productions(Resource):
     def get(self):
@@ -8,7 +9,7 @@ class Productions(Resource):
             # return make_response(serialized_prods, 200)
             return serialized_prods, 200
         except Exception as e:
-            return {"error": str(e)}
+            return {"error": str(e)}, 400
 
     def post(self):
         try:
@@ -18,7 +19,10 @@ class Productions(Resource):
             prod = Production(**data)  #! model validations kick in at this point
             db.session.add(prod)
             db.session.commit()  #! database constraints kick in
-            return prod.to_dict(), 201
+            return prod.to_dict(rules=("crew_members",)), 201
+        # except IntegrityError as e:
+        #     db.session.rollback()
+        #     import ipdb; ipdb.set_trace()
         except Exception as e:
             db.session.rollback()
             return {"error": str(e)}, 400
