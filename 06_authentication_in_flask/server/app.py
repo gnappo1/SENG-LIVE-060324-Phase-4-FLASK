@@ -10,7 +10,7 @@
 # python seed.py
 
 #! External libraries imports
-from flask import request, g, render_template, make_response
+from flask import request, g, render_template, make_response, session
 from time import time
 from flask_restful import Resource
 from werkzeug.exceptions import NotFound
@@ -19,6 +19,7 @@ from werkzeug.exceptions import NotFound
 from app_config import app, api, db
 from models.production import Production
 from models.crew_member import CrewMember
+from models.user import User
 from routes.crew_member.crew_member_by_id import CrewMemberByID
 from routes.crew_member.crew_members import CrewMembers
 from routes.production.production_by_id import ProductionByID
@@ -69,6 +70,50 @@ def homepage():
         "homepage.html", prods=productions, crew_members=crew_members
     )
 
+@app.route("/api/v1/signup", methods=["POST"])
+def signup():
+    try:
+        #! extract the data out of the request
+        data = request.get_json()
+        #! instantiate a new User object
+        user = User(**data)
+        #! add the object to the session
+        db.session.add(user)
+        #! commit the session
+        db.session.commit()
+        #! now that we have an id, store the id inside the session
+        session["user_id"] = user.id
+        #! return the user
+        return user.to_dict(), 201
+    except Exception as e:
+        db.session.rollback()
+        return {"error": str(e)}, 400
+
+
+@app.route("/api/v1/signin", methods=["POST"])
+def signin():
+    try:
+        #! extract the data out of the request
+        data = request.get_json()
+        #! check that the credentials are correct
+        user = User.query.filter_by(email=data.get("email")).first()
+        if user and user.authenticate(data.get("password_hash")):
+            #! log the user in
+            session["user_id"] = user.id
+            return user.to_dict(), 200
+        return {"error": "Invalid Credentials"}, 422
+    except Exception as e:
+        return {"error": str(e)}, 400
+
+
+@app.route("/api/v1/signout", methods=["DELETE"])
+def signout():
+    try:
+        if "user_id" in session:
+            del session["user_id"]
+        return {}, 204
+    except Exception as e:
+        return {"error": str(e)}, 400
 
 api.add_resource(Productions, "/productions")
 api.add_resource(ProductionByID, "/productions/<int:id>")
