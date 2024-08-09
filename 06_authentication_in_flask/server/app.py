@@ -97,6 +97,10 @@ def signin():
         data = request.get_json()
         #! check that the credentials are correct
         user = User.query.filter_by(email=data.get("email")).first()
+        #! 2.0 Query Interface
+        # user = db.session.scalars(
+        #     db.select(User).where(User.email == "matteo@gmail.com")
+        # ).first()
         if user and user.authenticate(data.get("password_hash")):
             #! log the user in
             session["user_id"] = user.id
