@@ -1,20 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useFormik } from "formik"
 import * as yup from "yup"
-
+import toast from "react-hot-toast" 
 
 
 function ProductionFormEdit() {
   const navigate = useNavigate()
-  const { updateProduction, production_edit } = useOutletContext()
+  const { updateProduction, production_edit, currentUser } = useOutletContext()
 
   const formSchema = yup.object().shape({
     title: yup.string().required("Must enter a title"),
     budget: yup.number().positive()
   })
 
+  useEffect(() => {
+    debugger
+    if (!currentUser) {
+      toast.error("You don't have permissions to see this form: Please log in")
+      navigate("/");
+    } else if (currentUser.id !== production_edit.user_id) {
+      toast.error("You're not the owner of this production: Access Denied")
+      navigate("/");
+    }
+  }, [currentUser, navigate, production_edit.user_id]);
 
   const formik = useFormik({
     initialValues: {

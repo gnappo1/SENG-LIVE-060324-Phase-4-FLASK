@@ -1,9 +1,10 @@
-from routes.__init__ import Resource, request, db, make_response
+from routes.__init__ import Resource, request, db, make_response, login_required
 from models.production import Production
 # from sqlite3 import IntegrityError
 from sqlalchemy.exc import IntegrityError
 
 class Productions(Resource):
+
     def get(self):
         try:
             serialized_prods = [prod.to_dict() for prod in Production.query]
@@ -12,6 +13,7 @@ class Productions(Resource):
         except Exception as e:
             return {"error": str(e)}, 400
 
+    @login_required
     def post(self):
         try:
             data = (

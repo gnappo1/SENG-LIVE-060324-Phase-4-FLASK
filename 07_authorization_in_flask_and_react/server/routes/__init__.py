@@ -7,7 +7,7 @@ def login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if "user_id" not in session:
-            return {"message": "Access Denied, please log in!"}, 422
+            return {"error": "Access Denied, please log in!"}, 422
         return func(*args, **kwargs)
 
     return decorated_function

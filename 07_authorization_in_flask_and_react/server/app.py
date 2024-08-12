@@ -119,6 +119,17 @@ def signout():
     except Exception as e:
         return {"error": str(e)}, 400
 
+@app.route("/api/v1/me", methods=["GET"])
+def me():
+    try:
+        if "user_id" in session:
+            user = db.session.get(User, session.get("user_id"))
+            return user.to_dict(), 200
+        else:
+            return {"error": "Please Login or Signup"}, 400
+    except Exception as e:
+        return {"error": str(e)}, 400
+
 api.add_resource(Productions, "/productions")
 api.add_resource(ProductionByID, "/productions/<int:id>")
 api.add_resource(CrewMembers, "/crew-members")

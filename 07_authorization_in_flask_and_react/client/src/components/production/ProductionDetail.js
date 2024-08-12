@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 function ProductionDetail() {
   const [production, setProduction] = useState(null)
   const [error, setError] = useState(null)
-  const { handleEdit, deleteProduction } = useOutletContext()
+  const { handleEdit, deleteProduction, currentUser } = useOutletContext()
 
   //Student Challenge: GET One 
   const { projectId } = useParams()
@@ -60,9 +60,12 @@ function ProductionDetail() {
             </div>
             <img src={image} alt={title}/>
           </div>
-      <button onClick={()=> handleEdit(production)} >Edit Production</button>
-      <button onClick={handleDelete} >Delete Production</button>
-
+      {
+        currentUser && currentUser.id === production.user_id && <>
+          <button onClick={()=> handleEdit(production)} >Edit Production</button>
+          <button onClick={handleDelete} >Delete Production</button>
+        </>
+      }
       </CardDetail>
     )
   }

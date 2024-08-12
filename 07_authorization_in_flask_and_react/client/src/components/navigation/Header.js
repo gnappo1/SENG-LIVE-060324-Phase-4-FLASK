@@ -1,11 +1,26 @@
 import { useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import toast from "react-hot-toast"
 
-function Header({handleEdit}) {
+function Header({ currentUser, updateUser }) {
  const [menu, setMenu] = useState(false)
-  
+ const navigate = useNavigate()
+
+  const handleDelete = () => {
+    fetch("/signout", {method: "DELETE"})
+    .then(resp => {
+      if (resp.ok) {
+        updateUser(null)
+        toast.success("See you soon!")
+        navigate("/")
+
+      } else {
+        resp.json().then(errorObj => toast.error(errorObj.error))
+      }
+    })
+  }
     return (
         <Nav> 
          <NavH1>Flatiron Theater Company</NavH1>
@@ -16,8 +31,14 @@ function Header({handleEdit}) {
            </div>:
            <ul>
             <li onClick={() => setMenu(!menu)}>x</li>
-            <li ><Link to='/productions/new'>New Production</Link></li>
             <li><Link to='/'> Home</Link></li>
+            {currentUser && (
+              <>
+                <li ><Link to='/productions/new'>New Production</Link></li>
+                  <button onClick={handleDelete}>Logout</button>
+              </>
+            )}
+            {!currentUser && <li><Link to='/registration'> Registration</Link></li>}
            </ul>
            }
          </Menu>

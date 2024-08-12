@@ -10,6 +10,7 @@ import "./App.css"
 
 function App() {
   const [productions, setProductions] = useState([])
+  const [currentUser, setCurrentUser] = useState(null);
   const [production_edit, setProductionEdit] = useState(false)
   const navigate = useNavigate()
 
@@ -25,7 +26,18 @@ function App() {
     })
     .catch(errorObj => toast.error(errorObj.message))
   }, []);
-
+  
+  useEffect(() => {
+    fetch("/me")
+    .then(resp => {
+      if (resp.ok) {
+        resp.json().then(setCurrentUser)
+      } else {
+        resp.json().then(errorObj => toast.error(errorObj.error))
+      }
+    })
+      .catch(errorObj => toast.error(errorObj.message))
+  }, []);
   // 6.✅ navigate to client/src/components/ProductionForm.js
 
   const addProduction = (production) => setProductions(productions => [...productions, production])
@@ -41,12 +53,14 @@ function App() {
     navigate(`/productions/${production.id}/edit`)
   }
 
+  const updateUser = (value) => setCurrentUser(value)
+
   return (
     <>
       <GlobalStyle />
-      <Header handleEdit={handleEdit} />
+      <Header handleEdit={handleEdit} currentUser={currentUser} updateUser={updateUser} />
       <Toaster />
-      <Outlet context={{ addProduction, updateProduction, deleteProduction, productions, production_edit, handleEdit }} />
+      <Outlet context={{ currentUser, updateUser, addProduction, updateProduction, deleteProduction, productions, production_edit, handleEdit }} />
     </>
   )
 }

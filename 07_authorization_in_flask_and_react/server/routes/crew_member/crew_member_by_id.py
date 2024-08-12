@@ -1,11 +1,12 @@
-from routes.__init__ import Resource, g, request, db
+from routes.__init__ import Resource, g, request, db, login_required
 
 class CrewMemberByID(Resource):
     def get(self, id):
         if g.crew:
             return g.crew.to_dict(rules=("production",)), 200
         return {"message": f"Could not find CrewMember with id #{id}"}, 404
-
+    
+    @login_required
     def patch(self, id):
         try:
             #! extract request's data
@@ -18,7 +19,8 @@ class CrewMemberByID(Resource):
             return g.crew.to_dict(rules=("production",)), 202
         except Exception as e:
             return {"error": str(e)}, 422
-
+    
+    @login_required
     def delete(self, id):
         try:
             db.session.delete(g.crew)
