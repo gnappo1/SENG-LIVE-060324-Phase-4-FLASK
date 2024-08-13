@@ -64,7 +64,7 @@ const Registration = () => {
           validationSchema={isLogin ? signinSchema : signupSchema}
           initialValues={initialValues}
           onSubmit={(formData) => {
-            const finalUrl = isLogin ? "/signin" : "/signup"
+            const finalUrl = isLogin ? "/api/v1/signin" : "/api/v1/signup";
             fetch(finalUrl, {
               method: "POST",
               headers: {

@@ -49,7 +49,7 @@ function ProductionForm() {
           initialValues={initialValues}
           validationSchema={productionSchema}
           onSubmit={(formData) => {
-            fetch("/productions", {
+            fetch("/api/v1/productions", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"

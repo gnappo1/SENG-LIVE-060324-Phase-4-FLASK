@@ -1,8 +1,8 @@
-"""models
+"""create users, productions, crew_members
 
-Revision ID: 380a58c012f9
+Revision ID: a435fa2b689c
 Revises: 
-Create Date: 2024-08-12 11:03:11.022168
+Create Date: 2024-08-13 08:03:27.845690
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '380a58c012f9'
+revision = 'a435fa2b689c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('username', sa.String(length=25), nullable=False),
     sa.Column('email', sa.String(length=80), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
@@ -39,7 +39,7 @@ def upgrade():
     sa.Column('image', sa.String(), nullable=True),
     sa.Column('ongoing', sa.Boolean(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.CheckConstraint('budget >= 0 AND budget < 1000000', name='check_positive_budget_less_than_one_million'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -52,7 +52,7 @@ def upgrade():
     sa.Column('name', sa.String(length=80), nullable=False),
     sa.Column('role', sa.String(), nullable=True),
     sa.Column('production_id', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['production_id'], ['productions.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')

@@ -16,7 +16,7 @@ function App() {
 
   //5.✅ GET Productions
   useEffect(() => {
-    fetch("/productions")
+    fetch("/api/v1/productions")
     .then(resp => {
       if (resp.ok) { //! 200-299
         resp.json().then(setProductions)
@@ -28,7 +28,7 @@ function App() {
   }, []);
   
   useEffect(() => {
-    fetch("/me")
+    fetch("/api/v1/me")
     .then(resp => {
       if (resp.ok) {
         resp.json().then(setCurrentUser)

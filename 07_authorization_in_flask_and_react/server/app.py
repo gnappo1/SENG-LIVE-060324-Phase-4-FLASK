@@ -44,7 +44,7 @@ def before_request():
     #     id = request.view_args.get("id")
     #     crew = db.session.get(CrewMember, id)
     #     g.crew = crew
-
+    # import ipdb; ipdb.set_trace()
     #! Better Approach
     path_dict = {"productionbyid": Production, "crewmemberbyid": CrewMember}
     if request.endpoint in path_dict:

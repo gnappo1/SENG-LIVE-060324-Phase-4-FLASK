@@ -9,7 +9,7 @@ function Header({ currentUser, updateUser }) {
  const navigate = useNavigate()
 
   const handleDelete = () => {
-    fetch("/signout", {method: "DELETE"})
+    fetch("/api/v1/signout", {method: "DELETE"})
     .then(resp => {
       if (resp.ok) {
         updateUser(null)

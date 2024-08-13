@@ -14,7 +14,7 @@ function ProductionDetail() {
   const navigate = useNavigate()
 
   useEffect(()=>{
-    fetch(`/productions/${projectId}`)
+    fetch(`/api/v1/productions/${projectId}`)
       .then(resp => {
         if (resp.ok) {
           resp.json().then(setProduction)
